@@ -38,8 +38,7 @@ class MainHandler(webapp2.RequestHandler):
 		
 		#reading the file data POST information.
 		csvFile = self.request.get('csvFile')
-		print csvFile
-		print csvFile
+
 		if csvFile:
 			#to handle universal new line char for  MAC systems
 			csvFile = csvFile.replace("\r","\n")
@@ -56,9 +55,7 @@ class MainHandler(webapp2.RequestHandler):
 	def processData(self,csvFile= None):
 
 		if csvFile:
-			print 1
-			print 1
-			
+
 			#initateing CSV reader object to parse the csv file.
 			fileReader = csv.DictReader(csvFile, skipinitialspace=True, restkey='uncategorized', restval='', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 			
