@@ -1,0 +1,28 @@
+application: cache-mm
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /sampleData\.csv
+  static_files: sampleData.txt
+  upload: sampleData\.csv
+  http_headers:
+    Content-Type: text/csv
+    Content-Disposition: "attachment; filename=sample.csv"
+
+
+- url: .*
+  script: main.app
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+
+- name: django
+  version: "1.3"
