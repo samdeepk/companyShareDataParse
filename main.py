@@ -22,16 +22,20 @@ from django.template import Context, Template
 from django.template.loader import render_to_string
 
 class MainHandler(webapp2.RequestHandler):
-	#class to 
+	#class to handle UI 
+	# render processed data via UI
+	# processing of data 
 
 
 	def get(self):
 		
-		
+		#sample data for unit test and show default sample data.
 		csvFile = open('input.txt', 'rb')
 
 		data = {'data':self.processData(csvFile),'sampleData':True}
 		path = os.path.join(os.path.dirname(__file__), 'showData.html')
+		
+		#function to render the dictionary data to template
 		pageDate = render_to_string( path, data)
 		self.response.out.write(pageDate)
 	def post(self):
@@ -46,12 +50,18 @@ class MainHandler(webapp2.RequestHandler):
 			#casting the data to stream for input to csvreader module.
 			csvFile = StringIO(csvFile)	
 
+			#function to render the dictionary data to template
 			data = {'data':self.processData(csvFile) if csvFile else []}
 			path = os.path.join(os.path.dirname(__file__), 'showData.html') 
 			pageDate = render_to_string( path, data)
 			self.response.out.write(pageDate)
 		else: self.redirect('/')
 
+
+	#function to parse the CSV file and return data in dictionary form
+	#takes one keyword arg csvFile
+	#returns dictionary of data on with key as company name and values to be dict with lists 
+	#	sets with date occurrences. 
 	def processData(self,csvFile= None):
 
 		if csvFile:
@@ -79,9 +89,11 @@ class MainHandler(webapp2.RequestHandler):
 					for companyName in fileReader.fieldnames:
 						if companyName not in ['Year','Month']:
 							#intializing the values of each company with max and min values with a list to hold possiblity of multiple max and min values. 
-							structuredData.update({companyName:{'least':[(int(reader.get(companyName)),year,month)],
-																'max':[(int(reader.get(companyName)),year,month)]}
-													})
+							structuredData.update({
+											companyName:
+												{'least':[(int(reader.get(companyName)),year,month)],
+												'max':[(int(reader.get(companyName)),year,month)]}
+											})
 				else:
 					for companyName in feilds:
 
@@ -110,11 +122,7 @@ class MainHandler(webapp2.RequestHandler):
 			return structuredData
 
 			
-		for key in structuredData:
-			print 'Company Name: ',key
-			print "Least: ",structuredData[key]["least"]
-			print "Max: ",structuredData[key]["max"]
-			print 
+		return {} 
 
 
 app = webapp2.WSGIApplication([
